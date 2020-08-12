@@ -1,5 +1,3 @@
-username: testgithub
-userpwd: github
 spring:
     application:
         name: ams-file-service
