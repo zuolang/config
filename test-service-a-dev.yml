@@ -1,2 +1,84 @@
 username: testgithub
 userpwd: github
+spring:
+    application:
+        name: ams-file-service
+    jackson:
+        time-zone: GMT+8
+        date-format: yyyy-MM-dd HH:mm:ss
+        default-property-inclusion: non_null
+    datasource:
+        url: jdbc:mysql://192.168.0.6:3306/ams_file_service?useUnicode=true&characterEncoding=UTF8&allowMultiQueries=true&allowPublicKeyRetrieval=true
+        username: root
+        password: root
+        driver-class-name: com.mysql.jdbc.Driver
+        druid:
+          initial-size: 1 # 初始化连接大小
+          min-idle: 1     # 最小空闲连接数
+          max-active: 20  # 最大连接数
+          test-on-borrow: true
+    redis:
+        database: 1
+        host: ${REDIS_HOST:ycloud-redis.ycloud}
+        port: ${REDIS_PORT:6377}
+        password: 1q2w3e4r
+        pool:
+          max-active: 20
+    http:
+      multipart:
+        enabled: true
+        max-file-size: 50MB # 设置单个文件的最大长度
+        max-request-size: 50MB # 设置最大的请求文件的大小
+        file-size-threshold: 100MB  # 当上传文件达到1MB的时候进行磁盘写入
+
+mybatis:
+    type-aliases-package: com.yss.ams.file.mapper
+    mapper-locations: classpath:mapper/**/*.xml
+
+logging:
+  level:
+    com.yss.base.security.admin.mapper: debug
+  file: "logs/ams-file-service"
+
+file:
+  #设定文件拆包大小(默认256KB)
+  resolveSize: 262144
+  #文件下载后在本地缓存的临时路径
+  tempFilePath: /home/tempFilePath
+  #服务器上存放文件的共享目录根目录
+  sourceFilePath: /home/TrustReport
+  #文件扫描服务的间隔频率
+  scanFileRate: 10
+  #光大文件服务、云平台文件服务互通服务地址(实际环境切换ip即可) 111.205.51.104:8801(光大现场测试地址) 192.168.102.105:8801(公司模拟测试地址)
+  fileService: https://192.168.102.105:8202/ams/ams-file-service/fileServer/
+  #本地文件缓存保留天数
+  tempFileSaveDay: 5
+  #自动扫描托管报告文件的定时频率(0 0/10 8-20 * * ? 每天8点至20点，每隔10分钟执行一次)，闲时任务调度控制0 0 23 31 * ?
+  scanFileCron: 0 0 23 31 * ?
+  #自动清理本地缓存文件的定时任务频率(0 30 23 ? * * 每天23:30点执行)
+  cleanFileCron: 0 30 23 ? * *
+  #文件上传路径  add by minliangqin 20180521
+  uploadPath: file/
+  dictdesc: ftpMessage
+  ftpMessage: insideFtp
+
+resource:
+  client:
+    enable: true
+    use-http-type: feign
+
+#返回前台头像的ip yangyh
+photo:
+  address: 1.119.186.147
+  port: 18000
+
+#业务日志和堆栈日志对应的logstash日志收集服务地址
+logstash:
+  buslog: 192.168.103.72:9250
+  stacklog: 192.168.103.72:9251
+
+info:
+  app:
+    name: 文件服务
+    version: 1.0
+
